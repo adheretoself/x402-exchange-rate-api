@@ -7,9 +7,9 @@
   },
   "dependencies": {
     "express": "^4.19.2",
-    "@x402/core": "^0.2.0",
-    "@x402/evm": "^0.2.0",
-    "@x402/express": "^0.2.0",
-    "@x402/extensions": "^0.2.0"
+    "x402-express": "^0.7.3",
+    "x402-core": "^0.7.3",
+    "x402-evm": "^0.7.3",
+    "@x402/extensions": "^0.7.3"
   }
 }
