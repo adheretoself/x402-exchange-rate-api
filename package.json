@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node index.js"
   },
-  "type": "module",  // 重要！支持 ES6 import
+  "type": "module",
   "dependencies": {
     "express": "^4.19.2",
     "@x402/core": "latest",
