@@ -1,22 +1,18 @@
-const express = require('express');
-const { paymentMiddleware } = require('@x402/express');
+import express from 'express';
+import { paymentMiddleware } from '@x402/express';
 
 const app = express();
+const payTo = '0xa43d27e736EB8c9816102a4C48bB5e8a7Da8c5ef';  // 替换这里
 
-// x402支付中间件：每调用/rate收0.02 USDC on Base主网
-app.use(paymentMiddleware({
-  facilitatorUrl: 'https://facilitator.cdp.coinbase.com',
-  payTo: '0xa43d27e736EB8c9816102a4C48bB5e8a7Da8c5ef',  // 换成你的0x地址
-  routes: {
-    '/rate': {
-      amount: '0.02',  // 可改0.01吸引更多调用
-      asset: 'USDC',
-      chainId: 'base:8453'
-    }
+// 支付中间件：只保护 /rate 端点
+app.use(paymentMiddleware(payTo, {
+  'GET /rate': {
+    price: '$0.02',  // 每调用0.02 USDC
+    network: 'base'  // 主网；测试用 'base-sepolia'
   }
 }));
 
-// 核心API端点：/rate?from=USD&to=CNY
+// 核心汇率端点
 app.get('/rate', async (req, res) => {
   const { from = 'USD', to = 'EUR' } = req.query;
   try {
@@ -32,16 +28,14 @@ app.get('/rate', async (req, res) => {
       date: data.date
     });
   } catch (error) {
-    res.status(500).json({ error: '获取失败，请重试' });
+    res.status(500).json({ error: '获取失败' });
   }
 });
 
-// 加个根路径测试
+// 欢迎页
 app.get('/', (req, res) => {
-  res.send('汇率API已上线！访问 /rate?from=USD&to=CNY 测试（需支付）');
+  res.send('汇率付费API上线！访问 /rate?from=USD&to=CNY 测试（支付0.02 USDC）');
 });
 
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`API运行在端口 ${port}`);
-});
+app.listen(port, () => console.log(`运行在 ${port}`));
