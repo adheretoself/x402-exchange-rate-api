@@ -7,9 +7,6 @@
   },
   "type": "module",
   "dependencies": {
-    "express": "^4.19.2",
-    "@x402/core": "latest",
-    "@x402/evm": "latest",
-    "@x402/express": "latest"
+    "express": "^4.19.2"
   }
 }
